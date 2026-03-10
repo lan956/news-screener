@@ -59,7 +59,7 @@ def scrape_site(site: dict) -> list[dict]:
         # ── Headline ─────────────────────────────────────────────────────────
         title_els = card.css(title_sel)
         title_el  = title_els[0] if title_els else None
-        title     = title_el.get_text(separator=" ").strip() if title_el else None
+        title     = title_el.text.strip() if title_el else None
         if not title:
             continue                              # skip cards without a headline
 
@@ -68,7 +68,7 @@ def scrape_site(site: dict) -> list[dict]:
         if summary_sel:
             summary_els = card.css(summary_sel)
             summary_el  = summary_els[0] if summary_els else None
-            summary     = summary_el.get_text(separator=" ").strip() if summary_el else None
+            summary     = summary_el.text.strip() if summary_el else None
 
         # ── Link ─────────────────────────────────────────────────────────────
         link = None
