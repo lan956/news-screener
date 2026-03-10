@@ -1,0 +1,12 @@
+[
+  {
+    "name":        "Naver News - Economy",
+    "url":         "https://news.naver.com/section/101",
+    "article_sel": "div.section_latest_article ul li",
+    "title_sel":   "div.sa_text strong",
+    "summary_sel": "div.sa_text_lede",
+    "link_sel":    "div.sa_text a",
+    "base_url":    "https://news.naver.com",
+    "impersonate": "chrome"
+  }
+]
