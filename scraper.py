@@ -11,7 +11,6 @@ See sites.json.example for guidance on finding the right selectors.
 
 import logging
 from scrapling.fetchers import Fetcher
-from config import MAX_ARTICLES_PER_SITE
 
 log = logging.getLogger(__name__)
 
@@ -55,7 +54,7 @@ def scrape_site(site: dict) -> list[dict]:
         return []
 
     results = []
-    for card in articles_raw[:MAX_ARTICLES_PER_SITE]:
+    for card in articles_raw:
         # ── Headline ─────────────────────────────────────────────────────────
         title_els = card.css(title_sel)
         title_el  = title_els[0] if title_els else None
