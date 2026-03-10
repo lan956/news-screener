@@ -1,0 +1,4 @@
+scrapling[fetchers]
+python-dotenv
+schedule
+requests

@@ -1,0 +1,24 @@
+[
+  {
+    "_comment": "── VnExpress English ────────────────────────────────────────────────────",
+    "name":        "VnExpress",
+    "url":         "https://e.vnexpress.net/",
+    "article_sel": "article.item-news",
+    "title_sel":   "h3.title-news a, h2.title-news a",
+    "summary_sel": "p.description a",
+    "link_sel":    "h3.title-news a, h2.title-news a",
+    "base_url":    "https://e.vnexpress.net",
+    "impersonate": "chrome"
+  },
+  {
+    "_comment": "── BBC News World ────────────────────────────────────────────────────────",
+    "name":        "BBC World",
+    "url":         "https://www.bbc.com/news/world",
+    "article_sel": "[data-testid='edinburgh-article']",
+    "title_sel":   "h3[data-testid='card-headline']",
+    "summary_sel": "p[data-testid='card-description']",
+    "link_sel":    "a[data-testid='internal-link']",
+    "base_url":    "https://www.bbc.com",
+    "impersonate": "chrome"
+  }
+]
