@@ -57,20 +57,23 @@ def scrape_site(site: dict) -> list[dict]:
     results = []
     for card in articles_raw[:MAX_ARTICLES_PER_SITE]:
         # ── Headline ─────────────────────────────────────────────────────────
-        title_el = card.css(title_sel)
-        title    = title_el.get_text(separator=" ").strip() if title_el else None
+        title_els = card.css(title_sel)
+        title_el  = title_els[0] if title_els else None
+        title     = title_el.get_text(separator=" ").strip() if title_el else None
         if not title:
             continue                              # skip cards without a headline
 
         # ── Summary (optional) ───────────────────────────────────────────────
         summary = None
         if summary_sel:
-            summary_el = card.css(summary_sel)
-            summary    = summary_el.get_text(separator=" ").strip() if summary_el else None
+            summary_els = card.css(summary_sel)
+            summary_el  = summary_els[0] if summary_els else None
+            summary     = summary_el.get_text(separator=" ").strip() if summary_el else None
 
         # ── Link ─────────────────────────────────────────────────────────────
         link = None
-        link_el = card.css(link_sel)
+        link_els = card.css(link_sel)
+        link_el  = link_els[0] if link_els else None
         if link_el:
             href = link_el.attrib.get("href", "")
             if href:
