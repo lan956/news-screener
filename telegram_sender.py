@@ -13,26 +13,25 @@ from config import TELEGRAM_TOKEN, TELEGRAM_CHAT_ID
 log = logging.getLogger(__name__)
 
 API_URL = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
-MAX_MSG_LEN = 4096   # Telegram hard limit per message
+MAX_MSG_LEN = 4096
 
 
 def _escape(text: str) -> str:
-    """Escape special chars for Telegram MarkdownV2."""
-    special = r"\_*[]()~`>#+-=|{}.!"
-    return "".join(f"\\{c}" if c in special else c for c in text)
+    """Escape special HTML characters."""
+    return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 
 def _build_digest(site_name: str, articles: list[dict]) -> str:
-    """Format one site's articles as a MarkdownV2 string."""
-    lines = [f"📰 *{_escape(site_name)}*\n"]
+    """Format one site's articles as an HTML string."""
+    lines = [f"📰 <b>{_escape(site_name)}</b>\n"]
     for i, art in enumerate(articles, 1):
         title   = _escape(art["title"])
         summary = _escape(art["summary"]) if art["summary"] else ""
         link    = art["link"]
 
-        block = f"*{i}\\. [{title}]({link})*"
+        block = f'<b>{i}. <a href="{link}">{title}</a></b>'
         if summary:
-            block += f"\n_{summary}_"
+            block += f"\n<i>{summary}</i>"
         lines.append(block)
 
     return "\n\n".join(lines)
@@ -43,7 +42,7 @@ def _send(text: str) -> bool:
     payload = {
         "chat_id":                  TELEGRAM_CHAT_ID,
         "text":                     text,
-        "parse_mode":               "MarkdownV2",
+        "parse_mode":               "HTML",
         "disable_web_page_preview": True,
     }
     resp = requests.post(API_URL, json=payload, timeout=15)
@@ -54,15 +53,8 @@ def _send(text: str) -> bool:
 
 
 def send_news_digest(all_articles: list[tuple[str, list[dict]]]) -> None:
-    """
-    Send the full digest to Telegram.
-
-    all_articles: list of (site_name, articles) tuples
-    Messages are split per-site so we never exceed Telegram's 4096-char limit.
-    """
     today = date.today().strftime("%A, %d %B %Y")
-    header = f"🗞 *Daily News Digest*\n_{_escape(today)}_"
-    _send(header)
+    _send(f"🗞 <b>Daily News Digest</b>\n<i>{_escape(today)}</i>")
 
     for site_name, articles in all_articles:
         if not articles:
@@ -70,12 +62,9 @@ def send_news_digest(all_articles: list[tuple[str, list[dict]]]) -> None:
             continue
 
         body = _build_digest(site_name, articles)
-
-        # Split into chunks if somehow over the limit
         for chunk in _chunk(body, MAX_MSG_LEN):
             _send(chunk)
 
 
 def _chunk(text: str, size: int) -> list[str]:
-    """Split text into chunks of at most `size` characters."""
     return [text[i:i + size] for i in range(0, len(text), size)]
