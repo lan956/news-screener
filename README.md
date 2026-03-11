@@ -5,7 +5,10 @@ forwards them to a Telegram chat. Built with **Scrapling** for fast,
 anti-bot-friendly scraping.
 
 ---
-
+## First time setup
+```
+playwright install chromium
+```
 ## Setup
 
 ### 1. Install dependencies
